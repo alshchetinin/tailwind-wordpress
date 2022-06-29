@@ -5,13 +5,11 @@ import named from 'vinyl-named';
 import yargs from 'yargs';
 import gulpif from 'gulp-if';
 import postcss from 'gulp-postcss';
-const autoprefixer = require('autoprefixer');
 import imagemin from 'gulp-imagemin';
 import del from 'del';
-import fs from 'fs'
 import rsync from "gulp-rsync"
-import info from "./package.json";
 
+const proxy = 'http://awtheme.local/'
 
 const PRODUCTION = yargs.argv.prod;
 
@@ -20,12 +18,11 @@ export const styles = () => {
     require('tailwindcss'), 
     require('postcss-import'),       
     require('autoprefixer'),
-    // require('cssnano')
+    require('cssnano'),
   ]
 
   return src('src/css/bundle.css')
     .pipe(postcss(plugins))
-    // .pipe(gulpif(PRODUCTION, postcss(plugins)))
     .pipe(dest('dist/css'))
     .pipe(server.stream());
 }
@@ -89,7 +86,7 @@ export const watchForChanges = () => {
 const server = browserSync.create();
 export const serve = done => {
   server.init({
-    proxy: "http://awtheme.local/" // put your local website link here
+    proxy: proxy
   });
   done();
 };
@@ -121,8 +118,8 @@ export const deploy = () => {
       root: 'bundled/',
       hostname: 'promikl_evplus@promikl.beget.tech',
       destination: 'wp-content/themes/ev-theme/',      
-      // clean: true, // Mirror copy with file deletion
-      include: [/* '*.htaccess' */], // Included files to deploy,
+      
+      include: []
       exclude: [ 
       '**/Thumbs.db',
       '**/*.DS_Store',
