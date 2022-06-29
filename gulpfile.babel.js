@@ -16,9 +16,23 @@ const PRODUCTION = yargs.argv.prod;
 export const styles = () => {
   const plugins = [
     require('tailwindcss'), 
+    require("rfs")({
+      baseValue: 16, // Default: 20 (which is 1.25rem)
+      unit: "rem", // Default: rem
+      breakpoint: 1280, // Default: 1200
+      breakpointUnit: "px", // Default: px
+      factor: 10, // Default: 10
+      remValue: 16, // Default: 16
+      twoDimensional: false, // Default: false
+      class: false, // Default: false
+      safariIframeResizeBugFix: false, // Default: false
+      unitPrecision: 5, // Default: 5
+      functionName: "rfs", // Default: rfs
+      enableRfs: true, // Default: true
+      mode: "min-media-query", // Default: min-media-query
+    }), 
     require('postcss-import'),       
-    require('autoprefixer'),
-    require('cssnano'),
+    require('autoprefixer'),       
   ]
 
   return src('src/css/bundle.css')
@@ -119,7 +133,7 @@ export const deploy = () => {
       hostname: 'promikl_evplus@promikl.beget.tech',
       destination: 'wp-content/themes/ev-theme/',      
       
-      include: []
+      include: [],
       exclude: [ 
       '**/Thumbs.db',
       '**/*.DS_Store',
